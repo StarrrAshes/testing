@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Verdex</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b1622'/><text x='4' y='23' font-size='20' font-family='Georgia' fill='%232dd4bf' font-weight='700'>V</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+:root{--deep:#0b1622;--ocean-dark:#0d2137;--ocean-mid:#134568;--ocean-light:#1a6b8a;--brand:#2dd4bf;--brand-muted:#1a9c8b;--brand-glow:#5eead4;--pearl:#fff;--coral:#f97066;--gold:#d4a853;--slate:#64748b;--slate-light:#94a3b8;--green:#34d399;--red:#f87171;--heading:'Fraunces',Georgia,serif;--body:'Public Sans',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{font-size:16px}body{font-family:var(--body);background:var(--deep);color:var(--pearl);min-height:100vh;-webkit-font-smoothing:antialiased}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.login-screen::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(45,212,191,.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(19,69,104,.15) 0%,transparent 50%);animation:bgShift 20s ease-in-out infinite alternate}
+@keyframes bgShift{0%{transform:translate(0,0)}100%{transform:translate(-5%,-3%)}}
+.login-card{position:relative;width:100%;max-width:400px;padding:2.5rem 2.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;backdrop-filter:blur(20px);animation:cardIn .8s var(--ease) forwards;opacity:0;transform:translateY(20px)}
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+.login-card .logo{font-family:var(--heading);font-size:1.4rem;font-weight:700;text-align:center;margin-bottom:.3rem}.login-card .logo span{color:var(--brand);font-style:italic}
+.login-card .subtitle{text-align:center;font-size:.7rem;color:var(--slate-light);text-transform:uppercase;letter-spacing:.15em;margin-bottom:2rem}
+.form-group{margin-bottom:1rem}.form-group label{display:block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-light);margin-bottom:.35rem}
+.form-group input{width:100%;padding:.75rem .9rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:var(--body);font-size:.85rem;color:var(--pearl);outline:none;transition:all .3s}
+.form-group input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(45,212,191,.1)}.form-group input::placeholder{color:var(--slate)}
+.btn{width:100%;padding:.85rem;background:var(--brand);color:var(--deep);border:none;border-radius:100px;font-family:var(--body);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .35s var(--ease);margin-top:.5rem}
+.btn:hover{background:var(--brand-glow);transform:translateY(-2px);box-shadow:0 8px 30px rgba(45,212,191,.25)}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.login-error{text-align:center;font-size:.78rem;color:var(--coral);margin-top:.8rem;display:none}
+.back-link{display:block;text-align:center;margin-top:1.2rem;font-size:.75rem;color:var(--slate-light);text-decoration:none;transition:color .3s}.back-link:hover{color:var(--brand)}
+.dashboard{display:none}
+.dash-header{padding:1rem 2rem;background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.dash-header .logo{font-family:var(--heading);font-size:1.1rem;font-weight:700}.dash-header .logo span{color:var(--brand);font-style:italic}
+.dash-header-right{display:flex;align-items:center;gap:1.2rem}.admin-name{font-size:.75rem;color:var(--slate-light)}
+.btn-logout{padding:.4rem 1rem;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:100px;color:var(--slate-light);font-family:var(--body);font-size:.7rem;cursor:pointer;transition:all .3s}.btn-logout:hover{border-color:var(--coral);color:var(--coral)}
+.dash-content{max-width:1100px;margin:0 auto;padding:2rem}
+.dash-title{font-family:var(--heading);font-size:1.8rem;font-weight:700;margin-bottom:.2rem}.dash-subtitle{font-size:.8rem;color:var(--slate-light);margin-bottom:1.5rem}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:2rem}
+.dash-stat{padding:1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center}
+.dash-stat .number{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--brand)}.dash-stat .label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-light);margin-top:.2rem}
+.dash-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:1.5rem}
+.dash-tab{padding:.7rem 1.3rem;font-family:var(--body);font-size:.75rem;font-weight:600;color:var(--slate-light);background:none;border:none;cursor:pointer;position:relative;transition:color .3s}.dash-tab:hover{color:var(--pearl)}.dash-tab.active{color:var(--brand)}.dash-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--brand)}
+.tab-panel{display:none}.tab-panel.active{display:block}.table-wrapper{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:.7rem .8rem;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-light);border-bottom:1px solid rgba(255,255,255,.08)}
+td{padding:.8rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.8)}tr:hover td{background:rgba(255,255,255,.02)}
+.status-badge{display:inline-block;padding:.2rem .6rem;border-radius:100px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.status-badge.pending{background:rgba(212,168,83,.15);color:var(--gold)}.status-badge.approved{background:rgba(52,211,153,.15);color:var(--green)}.status-badge.rejected{background:rgba(248,113,113,.15);color:var(--red)}
+.btn-approve,.btn-reject{padding:.3rem .8rem;border-radius:100px;font-family:var(--body);font-size:.65rem;font-weight:700;cursor:pointer;border:none;transition:all .3s;margin-right:.2rem}
+.btn-approve{background:rgba(52,211,153,.15);color:var(--green)}.btn-approve:hover{background:rgba(52,211,153,.3)}
+.btn-reject{background:rgba(248,113,113,.15);color:var(--red)}.btn-reject:hover{background:rgba(248,113,113,.3)}
+.add-school-form{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;padding:1.5rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:1.5rem}
+.add-school-form .form-group input{width:100%}
+.add-school-form .btn-add{grid-column:1/-1;padding:.7rem;background:var(--ocean-mid);color:var(--pearl);border:none;border-radius:100px;font-family:var(--body);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .3s}.add-school-form .btn-add:hover{background:var(--ocean-light)}
+.school-code-result{padding:.8rem 1.2rem;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:10px;font-size:.8rem;color:var(--brand);margin-bottom:1rem;display:none}
+.empty-state{text-align:center;padding:3rem 2rem;color:var(--slate);font-size:.85rem}
+.loading-state{text-align:center;padding:2.5rem 2rem;color:var(--slate);font-size:.8rem}
+.error-banner{padding:.7rem 1rem;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:10px;color:var(--red);font-size:.75rem;margin-bottom:1rem;display:none}
+@media(max-width:768px){.dash-stats{grid-template-columns:repeat(2,1fr)}.add-school-form{grid-template-columns:1fr}.dash-header{padding:.8rem 1rem}.dash-content{padding:1.2rem .8rem}}
+    </style>
+</head>
+<body>
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="logo">Verdex<span>.</span></div>
+            <div class="subtitle">Administrator Portal</div>
+            <div class="form-group"><label for="loginUser">Username</label><input type="text" id="loginUser" placeholder="Enter username" autocomplete="off"></div>
+            <div class="form-group"><label for="loginPass">Password</label><input type="password" id="loginPass" placeholder="Enter password"></div>
+            <button class="btn" id="loginBtn" onclick="login()">Sign In</button>
+            <div class="login-error" id="loginError">Invalid username or password</div>
+            <a href="index.html" class="back-link">← Back to main site</a>
+        </div>
+    </div>
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header"><div class="logo">Verdex<span>.</span> Admin</div><div class="dash-header-right"><span class="admin-name" id="adminName"></span><button class="btn-logout" onclick="logout()">Sign Out</button></div></div>
+        <div class="dash-content">
+            <h1 class="dash-title">Dashboard</h1>
+            <p class="dash-subtitle">Manage submissions, review data, and add partner schools.</p>
+            <div class="error-banner" id="errorBanner"></div>
+            <div class="dash-stats">
+                <div class="dash-stat"><div class="number" id="dPending">—</div><div class="label">Pending</div></div>
+                <div class="dash-stat"><div class="number" id="dApproved">—</div><div class="label">Approved</div></div>
+                <div class="dash-stat"><div class="number" id="dRejected">—</div><div class="label">Rejected</div></div>
+                <div class="dash-stat"><div class="number" id="dSchools">—</div><div class="label">Schools</div></div>
+            </div>
+            <div class="dash-tabs">
+                <button class="dash-tab active" data-tab="pending">Pending Review</button>
+                <button class="dash-tab" data-tab="approved">Approved</button>
+                <button class="dash-tab" data-tab="rejected">Rejected</button>
+                <button class="dash-tab" data-tab="schools">Schools</button>
+            </div>
+            <div class="tab-panel active" id="panel-pending"><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Location</th><th>Count</th><th>School</th><th>Volunteer</th><th>Actions</th></tr></thead><tbody id="pendingBody"></tbody></table></div><div class="loading-state" id="pendingLoading">Loading...</div><div class="empty-state" id="pendingEmpty" style="display:none">No pending submissions.</div></div>
+            <div class="tab-panel" id="panel-approved"><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Location</th><th>Count</th><th>School</th><th>Status</th></tr></thead><tbody id="approvedBody"></tbody></table></div><div class="loading-state" id="approvedLoading">Loading...</div><div class="empty-state" id="approvedEmpty" style="display:none">No approved submissions yet.</div></div>
+            <div class="tab-panel" id="panel-rejected"><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Location</th><th>Count</th><th>School</th><th>Status</th></tr></thead><tbody id="rejectedBody"></tbody></table></div><div class="loading-state" id="rejectedLoading">Loading...</div><div class="empty-state" id="rejectedEmpty" style="display:none">No rejected submissions.</div></div>
+            <div class="tab-panel" id="panel-schools">
+                <h3 style="font-family:var(--heading);font-size:1.2rem;margin-bottom:1.2rem">Add a Partner School</h3>
+                <div class="add-school-form">
+                    <div class="form-group"><label for="schoolName">School Name</label><input type="text" id="schoolName" placeholder="Lincoln High School"></div>
+                    <div class="form-group"><label for="schoolContact">Contact Name</label><input type="text" id="schoolContact" placeholder="Mr. Smith"></div>
+                    <div class="form-group"><label for="schoolEmail">Contact Email</label><input type="email" id="schoolEmail" placeholder="teacher@school.edu"></div>
+                    <div class="form-group"><label for="schoolLocation">Location</label><input type="text" id="schoolLocation" placeholder="Miami, FL"></div>
+                    <button class="btn-add" onclick="addSchool()">Add School to Network</button>
+                </div>
+                <div class="school-code-result" id="schoolCodeResult"></div>
+                <div class="table-wrapper"><table><thead><tr><th>School</th><th>Contact</th><th>Location</th><th>Access Code</th><th>Status</th></tr></thead><tbody id="schoolsBody"></tbody></table></div>
+                <div class="loading-state" id="schoolsLoading">Loading...</div>
+                <div class="empty-state" id="schoolsEmpty" style="display:none">No partner schools yet.</div>
+            </div>
+        </div>
+    </div>
+<script>
+const API='https://script.google.com/macros/s/AKfycbxhHZImbmYiQ1bL-SDDS1gzccnH-FDnmoYk7rrTOrgWZzByf7fctmguXyWWvJMxljp1kA/exec';
+const UH='9b7a1259a6ad7707261570b98cf97cb90d4652de65645ff61c2cbc61585f5fad';
+const PH='bf615e2f42f3cf5d22436540896f326c41877404628d7ba1014b95f7aa74e4e0';
+let currentAdmin=null;
+async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+document.querySelectorAll('.dash-tab').forEach(t=>t.addEventListener('click',function(){document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));this.classList.add('active');document.getElementById('panel-'+this.dataset.tab).classList.add('active')}));
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+async function login(){
+    const user=document.getElementById('loginUser').value.trim();
+    const pass=document.getElementById('loginPass').value;
+    const btn=document.getElementById('loginBtn');
+    const error=document.getElementById('loginError');
+    if(!user||!pass){error.textContent='Please enter username and password';error.style.display='block';return}
+    btn.disabled=true;btn.textContent='Verifying...';error.style.display='none';
+    const userHash=await sha256(user);
+    const passHash=await sha256(pass);
+    if(userHash===UH&&passHash===PH){
+        currentAdmin={name:user};
+        document.getElementById('loginScreen').style.display='none';
+        document.getElementById('dashboard').style.display='block';
+        document.getElementById('adminName').textContent=user;
+        loadDashboard();
+    }else{
+        error.textContent='Invalid username or password';
+        error.style.display='block';
+    }
+    btn.disabled=false;btn.textContent='Sign In';
+}
+function logout(){currentAdmin=null;document.getElementById('dashboard').style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
+function loadDashboard(){loadStats();loadSubmissions('pending');loadSubmissions('approved');loadSubmissions('rejected');loadSchools()}
+function showError(m){const b=document.getElementById('errorBanner');b.textContent=m;b.style.display='block';setTimeout(()=>b.style.display='none',5000)}
+function loadStats(){fetch(API+'?action=getStats').then(r=>r.json()).then(r=>{if(r.status==='success'){document.getElementById('dPending').textContent=r.data.pending||0;document.getElementById('dApproved').textContent=r.data.approved||0;document.getElementById('dRejected').textContent=r.data.rejected||0;document.getElementById('dSchools').textContent=r.data.totalSchools||0}}).catch(e=>console.error('Stats:',e))}
+function loadSubmissions(status){const body=document.getElementById(status+'Body'),empty=document.getElementById(status+'Empty'),loading=document.getElementById(status+'Loading');body.innerHTML='';empty.style.display='none';loading.style.display='block';
+fetch(API+'?action=getData&status='+encodeURIComponent(status)).then(r=>r.json()).then(r=>{loading.style.display='none';if(r.status==='success'&&Array.isArray(r.data)&&r.data.length>0){const valid=r.data.filter(i=>(i.Date||i.date||'')!==''||(i.Location||i.location||'')!=='');if(!valid.length){empty.style.display='block';return}empty.style.display='none';valid.forEach(i=>{const tr=document.createElement('tr');const d=i.Date||i.date||'',l=i.Location||i.location||'',c=i['Microplastic Count']||i.count||'',s=i.School||i.school||'',v=i['Volunteer Name']||i.volunteer||'',id=i.SubmissionID||i.SubmissonID||'';if(status==='pending'){tr.innerHTML='<td>'+esc(d)+'</td><td>'+esc(l)+'</td><td>'+esc(String(c))+'</td><td>'+esc(s)+'</td><td>'+esc(v)+'</td><td><button class="btn-approve" onclick="updateStatus(\''+escA(id)+'\',\'approved\')">Approve</button><button class="btn-reject" onclick="updateStatus(\''+escA(id)+'\',\'rejected\')">Reject</button></td>'}else{tr.innerHTML='<td>'+esc(d)+'</td><td>'+esc(l)+'</td><td>'+esc(String(c))+'</td><td>'+esc(s)+'</td><td><span class="status-badge '+status+'">'+status+'</span></td>'}body.appendChild(tr)})}else{empty.style.display='block'}}).catch(e=>{loading.style.display='none';empty.style.display='block';console.error('Load '+status+':',e)})}
+function updateStatus(id,status){if(!id){showError('No submission ID found.');return}document.querySelectorAll('.btn-approve,.btn-reject').forEach(b=>b.disabled=true);fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'updateStatus',submissionId:id,status:status,reviewedBy:currentAdmin?currentAdmin.name:'admin'})}).then(()=>setTimeout(loadDashboard,2000)).catch(()=>setTimeout(loadDashboard,2000))}
+function loadSchools(){const body=document.getElementById('schoolsBody'),empty=document.getElementById('schoolsEmpty'),loading=document.getElementById('schoolsLoading');body.innerHTML='';empty.style.display='none';loading.style.display='block';
+fetch(API+'?action=getSchools').then(r=>r.json()).then(r=>{loading.style.display='none';if(r.status==='success'&&Array.isArray(r.data)&&r.data.length>0){empty.style.display='none';r.data.forEach(s=>{const tr=document.createElement('tr');tr.innerHTML='<td>'+esc(s.name||'')+'</td><td>'+esc(s.contactName||'')+'</td><td>'+esc(s.location||'')+'</td><td style="font-family:monospace;color:var(--brand)">'+esc(s.accessCode||'')+'</td><td><span class="status-badge approved">Active</span></td>';body.appendChild(tr)})}else{empty.style.display='block'}}).catch(e=>{loading.style.display='none';empty.style.display='block';console.error('Schools:',e)})}
+function addSchool(){const n=document.getElementById('schoolName').value.trim(),c=document.getElementById('schoolContact').value.trim(),e=document.getElementById('schoolEmail').value.trim(),l=document.getElementById('schoolLocation').value.trim();if(!n||!c||!e||!l){showError('Please fill in all fields.');return}fetch(API,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'addSchool',name:n,contactName:c,contactEmail:e,location:l})}).then(()=>{document.getElementById('schoolCodeResult').style.display='block';document.getElementById('schoolCodeResult').innerHTML='School submitted! Reload to see access code.';document.getElementById('schoolName').value='';document.getElementById('schoolContact').value='';document.getElementById('schoolEmail').value='';document.getElementById('schoolLocation').value='';setTimeout(()=>{loadSchools();loadStats()},2000)}).catch(()=>showError('Failed to add school.'))}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escA(s){if(!s)return'';return String(s).replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+</script>
+</body>
+</html>
